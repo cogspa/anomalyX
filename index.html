@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anomaly X Productions — Authored Reality Pipeline</title>
+    <meta name="description"
+        content="A Los Angeles virtual production studio building reconstructable virtual worlds through procedural generation, AI compositing, Gaussian splatting, and real-time engines.">
+    <link rel="stylesheet" href="https://use.typekit.net/fty7wjb.css">
+    <style>
+        :root {
+            --paper: #EFEBE0;
+            --paper-soft: #E6E1D3;
+            --ink: #1A1A18;
+            --ink-soft: #3A3933;
+            --mute: #6E6B61;
+            --rule: #C4BFB1;
+            --accent: #A53B2A;
+            --accent-soft: #C76A56;
+            --teal: #3D5957;
+            --void: #0F0E0C;
+            --void-soft: #1F1D19;
+            --void-mute: #6A675E;
+            --void-rule: #2E2B25;
+            --primary-font: "pt-sans-pro", sans-serif;
+            --tracking-wide: 0.18em;
+            --tracking-eyebrow: 0.24em;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--primary-font);
+            font-weight: 400;
+            background: var(--paper);
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
+            line-height: 1.55;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--paper);
+        }
+
+        /* ========== NAV ========== */
+        nav.topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 40px;
+            mix-blend-mode: difference;
+            pointer-events: none;
+        }
+
+        nav.topbar>* {
+            pointer-events: auto;
+        }
+
+        nav.topbar .mark {
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        nav.topbar .links {
+            display: flex;
+            gap: 32px;
+        }
+
+        nav.topbar .links a {
+            color: #fff;
+            font-size: 12px;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            text-decoration: none;
+            opacity: 0.85;
+            transition: opacity 0.2s;
+        }
+
+        nav.topbar .links a:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 720px) {
+            nav.topbar {
+                padding: 16px 24px;
+            }
+
+            nav.topbar .links {
+                gap: 16px;
+            }
+
+            nav.topbar .links a:not(.research) {
+                display: none;
+            }
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            padding: 0 40px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+        }
+
+        .hero-x {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vmin;
+            height: 90vmin;
+            opacity: 0.07;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .hero-x line {
+            stroke: var(--ink);
+            stroke-width: 1.5;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1280px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            letter-spacing: var(--tracking-eyebrow);
+            text-transform: uppercase;
+            color: var(--mute);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 32px;
+            height: 1px;
+            background: var(--mute);
+        }
+
+        .hero h1 {
+            font-weight: 700;
+            font-size: clamp(48px, 11vw, 184px);
+            line-height: 0.92;
+            letter-spacing: -0.04em;
+            margin-bottom: 32px;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent);
+        }
+
+        .hero-tag {
+            max-width: 580px;
+            font-size: clamp(18px, 1.6vw, 24px);
+            line-height: 1.4;
+            color: var(--ink-soft);
+            margin-bottom: 48px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 48px;
+            flex-wrap: wrap;
+            border-top: 1px solid var(--rule);
+            padding-top: 24px;
+            font-size: 12px;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            color: var(--mute);
+        }
+
+        .hero-meta span strong {
+            display: block;
+            color: var(--ink);
+            font-weight: 700;
+            margin-top: 4px;
+            letter-spacing: 0.04em;
+            font-size: 13px;
+        }
+
+        /* ========== TWIN ORGS ========== */
+        .twin {
+            background: var(--paper-soft);
+            border-top: 1px solid var(--rule);
+            border-bottom: 1px solid var(--rule);
+            padding: 80px 40px;
+        }
+
+        .twin-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1px 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        .twin-divider {
+            background: var(--rule);
+            align-self: stretch;
+        }
+
+        .twin-col .label {
+            font-size: 10px;
+            letter-spacing: var(--tracking-eyebrow);
+            text-transform: uppercase;
+            color: var(--mute);
+            margin-bottom: 16px;
+        }
+
+        .twin-col h2 {
+            font-size: clamp(28px, 3vw, 42px);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+        }
+
+        .twin-col p {
+            color: var(--ink-soft);
+            margin-bottom: 24px;
+            font-size: 16px;
+            max-width: 460px;
+        }
+
+        .twin-col a.link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px solid var(--ink);
+            padding-bottom: 4px;
+            font-weight: 700;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .twin-col a.link:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        @media (max-width: 880px) {
+            .twin-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .twin-divider {
+                display: none;
+            }
+        }
+
+        /* ========== SECTION SHELL ========== */
+        section.body-section {
+            padding: 140px 40px;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        .container-narrow {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .section-eyebrow {
+            font-size: 10px;
+            letter-spacing: var(--tracking-eyebrow);
+            text-transform: uppercase;
+            color: var(--mute);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section-eyebrow::before {
+            content: '';
+            width: 32px;
+            height: 1px;
+            background: var(--mute);
+        }
+
+        h2.section-title {
+            font-weight: 700;
+            font-size: clamp(36px, 5vw, 64px);
+            line-height: 1.0;
+            letter-spacing: -0.025em;
+            margin-bottom: 56px;
+            max-width: 14ch;
+        }
+
+        h2.section-title em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent);
+        }
+
+        /* ========== MANIFESTO ========== */
+        .manifesto p {
+            font-size: clamp(18px, 1.6vw, 22px);
+            line-height: 1.65;
+            margin-bottom: 28px;
+            color: var(--ink-soft);
+        }
+
+        .manifesto p:first-of-type::first-letter {
+            font-size: 5em;
+            float: left;
+            line-height: 0.85;
+            margin: 0.05em 0.12em 0 -0.04em;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .manifesto strong {
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        /* ========== PIPELINE ========== */
+        .pipeline-section {
+            background: var(--paper-soft);
+            border-top: 1px solid var(--rule);
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .pipeline-wrap {
+            max-width: 1280px;
+            margin: 56px auto 0;
+        }
+
+        .pipeline {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 64px;
+        }
+
+        .stage {
+            position: relative;
+            padding: 28px 22px 24px;
+            background: var(--paper);
+            border: 1px solid var(--rule);
+            transition: transform 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .stage:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            background: #fff;
+        }
+
+        .stage .num {
+            font-size: 11px;
+            letter-spacing: var(--tracking-wide);
+            color: var(--mute);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stage .num .arrow {
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        .stage .verb {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 4px;
+            line-height: 1.05;
+        }
+
+        .stage .tool {
+            font-size: 12px;
+            color: var(--mute);
+            font-style: italic;
+            margin-bottom: 14px;
+        }
+
+        .stage .desc {
+            font-size: 13px;
+            line-height: 1.45;
+            color: var(--ink-soft);
+        }
+
+        .pipeline-arrows {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--rule) 12%, var(--rule) 88%, transparent);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @media (max-width: 880px) {
+            .pipeline {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pipeline-foundation {
+            border: 1px solid var(--rule);
+            padding: 48px;
+            background: var(--paper);
+        }
+
+        .pipeline-foundation .fnd-label {
+            font-size: 10px;
+            letter-spacing: var(--tracking-eyebrow);
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .pipeline-foundation h3 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            margin-bottom: 32px;
+        }
+
+        .principles {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            border-top: 1px solid var(--rule);
+            padding-top: 32px;
+        }
+
+        .principle h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0;
+        }
+
+        .principle .pmark {
+            font-size: 10px;
+            letter-spacing: var(--tracking-wide);
+            color: var(--mute);
+            margin-bottom: 6px;
+        }
+
+        .principle p {
+            font-size: 13px;
+            color: var(--ink-soft);
+            line-height: 1.55;
+        }
+
+        @media (max-width: 720px) {
+            .pipeline-foundation {
+                padding: 28px;
+            }
+
+            .principles {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+        }
+
+        /* ========== STACK SECTION ========== */
+        .stack-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
+            margin-top: 56px;
+        }
+
+        .stack-item {
+            border-top: 1px solid var(--rule);
+            padding-top: 24px;
+        }
+
+        .stack-item .stack-tm {
+            font-size: 10px;
+            letter-spacing: var(--tracking-eyebrow);
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .stack-item h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .stack-item p {
+            font-size: 15px;
+            color: var(--ink-soft);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 720px) {
+            .stack-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+        }
+
+        /* ========== WHITE PAPERS ========== */
+        .papers {
+            background: var(--paper-soft);
+            border-top: 1px solid var(--rule);
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .paper-header {
+            max-width: 1080px;
+            margin: 0 auto 56px;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .paper-toggle {
+            display: flex;
+            gap: 8px;
+            background: var(--paper);
+            border: 1px solid var(--rule);
+            padding: 4px;
+        }
+
+        .paper-toggle button {
+            background: transparent;
+            border: none;
+            font-family: inherit;
+            font-size: 11px;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            padding: 10px 18px;
+            cursor: pointer;
+            color: var(--mute);
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .paper-toggle button.active {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        article.paper {
+            max-width: 760px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        article.paper.active {
+            display: block;
+        }
+
+        article.paper .paper-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 11px;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            color: var(--mute);
+            border-top: 1px solid var(--rule);
+            border-bottom: 1px solid var(--rule);
+            padding: 14px 0;
+            margin-bottom: 40px;
+        }
+
+        article.paper h1 {
+            font-size: clamp(32px, 4vw, 52px);
+            font-weight: 700;
+            line-height: 1.0;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+        }
+
+        article.paper h1 em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent);
+        }
+
+        article.paper>p:first-of-type {
+            font-size: 19px;
+            line-height: 1.55;
+            color: var(--ink-soft);
+            margin-bottom: 40px;
+            border-left: 2px solid var(--accent);
+            padding-left: 20px;
+        }
+
+        article.paper h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 56px 0 20px;
+            letter-spacing: -0.015em;
+            line-height: 1.15;
+        }
+
+        article.paper h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 32px 0 12px;
+            letter-spacing: 0;
+        }
+
+        article.paper h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin: 24px 0 10px;
+            letter-spacing: 0;
+        }
+
+        article.paper p,
+        article.paper li {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            color: var(--ink-soft);
+        }
+
+        article.paper ul {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+
+        article.paper ul li {
+            padding-left: 22px;
+            position: relative;
+        }
+
+        article.paper ul li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        article.paper strong {
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        article.paper em {
+            font-style: italic;
+        }
+
+        article.paper blockquote {
+            border-left: 2px solid var(--accent);
+            padding: 8px 0 8px 20px;
+            margin: 24px 0;
+            font-style: italic;
+            font-size: 18px;
+            line-height: 1.5;
+            color: var(--ink);
+        }
+
+        article.paper hr {
+            border: none;
+            border-top: 1px solid var(--rule);
+            margin: 48px 0;
+        }
+
+        article.paper table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 14px;
+        }
+
+        article.paper th,
+        article.paper td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        article.paper th {
+            font-size: 11px;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            color: var(--mute);
+            font-weight: 700;
+        }
+
+        article.paper td:first-child {
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        /* ========== DARK HANDOFF ========== */
+        .handoff {
+            background: var(--void);
+            color: var(--paper-soft);
+            padding: 160px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .handoff-x {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70vmin;
+            height: 70vmin;
+            opacity: 0.06;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .handoff-x line {
+            stroke: var(--paper-soft);
+            stroke-width: 1.5;
+        }
+
+        .handoff-content {
+            max-width: 880px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .handoff .section-eyebrow {
+            color: var(--void-mute);
+        }
+
+        .handoff .section-eyebrow::before {
+            background: var(--void-mute);
+        }
+
+        .handoff .section-eyebrow {
+            justify-content: center;
+        }
+
+        .handoff h2 {
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin: 24px 0 32px;
+        }
+
+        .handoff h2 strong {
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        .handoff p {
+            font-size: 17px;
+            line-height: 1.65;
+            color: var(--paper-soft);
+            opacity: 0.75;
+            max-width: 560px;
+            margin: 0 auto 40px;
+        }
+
+        .handoff a.research-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 28px;
+            border: 1px solid var(--paper-soft);
+            color: var(--paper-soft);
+            font-size: 12px;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 700;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .handoff a.research-cta:hover {
+            background: var(--paper-soft);
+            color: var(--void);
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            padding: 60px 40px 40px;
+            border-top: 1px solid var(--rule);
+            background: var(--paper);
+        }
+
+        .footer-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-grid h4 {
+            font-size: 10px;
+            letter-spacing: var(--tracking-eyebrow);
+            text-transform: uppercase;
+            color: var(--mute);
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .footer-grid p,
+        .footer-grid a {
+            font-size: 13px;
+            color: var(--ink-soft);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .footer-grid a:hover {
+            color: var(--accent);
+        }
+
+        .footer-grid .brand h3 {
+            font-weight: 700;
+            font-size: 28px;
+            letter-spacing: -0.015em;
+            margin-bottom: 8px;
+        }
+
+        .footer-grid .brand p {
+            max-width: 320px;
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            border-top: 1px solid var(--rule);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 11px;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            color: var(--mute);
+        }
+
+        @media (max-width: 880px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ========== REVEAL ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .hero-x,
+            .handoff-x {
+                transform: translate(-50%, -50%) !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="topbar">
+        <a href="#top" class="mark">Anomaly&nbsp;X</a>
+        <div class="links">
+            <a href="#manifesto">Studio</a>
+            <a href="#pipeline">Pipeline</a>
+            <a href="#stack">Stack</a>
+            <a href="#papers">Papers</a>
+            <a href="https://worldmodelresearch.com/" class="research" target="_blank" rel="noopener">Research →</a>
+        </div>
+    </nav>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero" id="top">
+        <svg class="hero-x" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+            <line x1="8" y1="12" x2="92" y2="88" />
+            <line x1="92" y1="12" x2="8" y2="88" />
+        </svg>
+        <div class="hero-content">
+            <div class="hero-eyebrow">Los Angeles · Est. 2026 · Production Studio</div>
+            <h1>Anomaly&nbsp;<em>X</em><br>Productions</h1>
+            <p class="hero-tag">A virtual production studio for the age of reconstructable worlds. We author
+                environments, integrate performance, encode perception, and activate scenes in real time — through a
+                proprietary pipeline called <em>Authored Reality</em>.</p>
+            <div class="hero-meta">
+                <span>Practice<strong>Virtual Production</strong></span>
+                <span>Method<strong>Authored Reality Pipeline™</strong></span>
+                <span>System<strong>Worldwright™</strong></span>
+                <span>Research<strong>World Model Research</strong></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TWIN ========== -->
+    <section class="twin">
+        <div class="twin-grid">
+            <div class="twin-col">
+                <div class="label">01 — Studio</div>
+                <h2>Anomaly X Productions</h2>
+                <p>Where authored worlds become cinema, installation, and interactive experience. A working studio
+                    operating the Authored Reality Pipeline™ on commercial, experimental, and gallery work.</p>
+                <a class="link" href="#manifesto">Read the manifesto →</a>
+            </div>
+            <div class="twin-divider"></div>
+            <div class="twin-col">
+                <div class="label">02 — Research</div>
+                <h2>World Model Research</h2>
+                <p>The studio's research counterpart — exploring how authored environments, Gaussian splat
+                    reconstruction, and emerging world models converge into a new paradigm for synthetic experience.</p>
+                <a class="link" href="https://worldmodelresearch.com/" target="_blank"
+                    rel="noopener">worldmodelresearch.com →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== MANIFESTO ========== -->
+    <section class="body-section" id="manifesto">
+        <div class="container-narrow">
+            <div class="section-eyebrow">A Manifesto</div>
+            <h2 class="section-title">Most studios generate content. We <em>build worlds.</em></h2>
+            <div class="manifesto reveal">
+                <p>The current era of AI production is dominated by prompts. A user types, a system generates, an output
+                    appears, and the chain ends. The artifact has no spatial memory, no reusability, no relationship to
+                    the world it pretends to depict. It is content, not a world.</p>
+                <p>Anomaly X Productions exists in opposition to that paradigm. We do not generate single shots; we
+                    author <strong>reconstructable environments</strong> — worlds that can be navigated, re-lit,
+                    re-performed, and re-deployed across film, XR, installation, and simulation. Every scene we produce
+                    is a system that can be revisited.</p>
+                <p>The "X" in our name marks our commitment to <strong>Authored Anomalies™</strong> — the deliberate,
+                    narrative-driven irregularities that we embed into every world. Where competitors aim for generic
+                    photorealism, we treat the anomaly as the signal. The break in logic, the impossible shadow, the
+                    scale distortion. These are not glitches. They are the fingerprints of authorship.</p>
+                <p>This site documents how we work, why our pipeline is structured the way it is, and what makes it
+                    different from anything else operating in this space.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== PIPELINE ========== -->
+    <section class="body-section pipeline-section" id="pipeline">
+        <div class="container">
+            <div class="section-eyebrow">The Pipeline</div>
+            <h2 class="section-title">Five stages, one closed&nbsp;loop.</h2>
+            <p style="font-size: 18px; color: var(--ink-soft); max-width: 640px; line-height: 1.6;">The Authored Reality
+                Pipeline™ replaces the linear chain of traditional VFX (model → texture → light → render) with a
+                closed-loop system: <strong>Sketch → Generate → Composite → Convert → Activate</strong>. Each stage
+                hands a structured artifact to the next. Each tool is best-in-class. Each pipeline card below links to
+                its tool.</p>
+
+            <div class="pipeline-wrap reveal">
+                <div class="pipeline">
+                    <a class="stage" href="https://unpromptable-gallery.netlify.app/" target="_blank" rel="noopener">
+                        <div class="num"><span>01 — Sketch</span><span class="arrow">↗</span></div>
+                        <div class="verb">Sketch</div>
+                        <div class="tool">Unpromptable</div>
+                        <div class="desc">Hybrid concepting and previs. Unmpromptable ideate the world's tone
+                            before structure is committed.</div>
+                    </a>
+                    <a class="stage" href="https://marble.worldlabs.ai/" target="_blank" rel="noopener">
+                        <div class="num"><span>02 — Generate</span><span class="arrow">↗</span></div>
+                        <div class="verb">Generate</div>
+                        <div class="tool">Marble · World Labs</div>
+                        <div class="desc">Procedural environment generation from text, image, or 3D layout. The world's
+                            geometric foundation.</div>
+                    </a>
+                    <a class="stage" href="https://beeble.ai/" target="_blank" rel="noopener">
+                        <div class="num"><span>03 — Composite</span><span class="arrow">↗</span></div>
+                        <div class="verb">Composite</div>
+                        <div class="tool">Beeble · SwitchLight 3.0</div>
+                        <div class="desc">Live-action footage extracted as PBR passes and relit to match the world's
+                            logic. Performance becomes world-native.</div>
+                    </a>
+                    <a class="stage" href="https://www.jawset.com/" target="_blank" rel="noopener">
+                        <div class="num"><span>04 — Convert</span><span class="arrow">↗</span></div>
+                        <div class="verb">Convert</div>
+                        <div class="tool">Postshot · Jawset</div>
+                        <div class="desc">Unified scenes encoded as Gaussian splats. Geometry yields to perception; the
+                            scene becomes a navigable field.</div>
+                    </a>
+                    <a class="stage" href="https://www.unrealengine.com/" target="_blank" rel="noopener">
+                        <div class="num"><span>05 — Activate</span><span class="arrow">↗</span></div>
+                        <div class="verb">Activate</div>
+                        <div class="tool">Unreal Engine</div>
+                        <div class="desc">Real-time deployment for cinematic, XR, interactive, and installation output.
+                            The engine plays back, doesn't build.</div>
+                    </a>
+                </div>
+
+                <div class="pipeline-foundation">
+                    <div class="fnd-label">Proprietary Layer · Artist-First</div>
+                    <h3>What sits beneath every stage.</h3>
+                    <div class="principles">
+                        <div class="principle">
+                            <div class="pmark">01</div>
+                            <h4>Authored Anomalies™</h4>
+                            <p>Narrative-driven irregularities embedded into procedural worlds. The deliberate break
+                                that distinguishes our worlds from generic AI output.</p>
+                        </div>
+                        <div class="principle">
+                            <div class="pmark">02</div>
+                            <h4>Contextual Cohesion Mapping</h4>
+                            <p>Alignment of lighting, perspective, scale, and narrative focus between procedural
+                                environment and live-action performance.</p>
+                        </div>
+                        <div class="principle">
+                            <div class="pmark">03</div>
+                            <h4>Perceptual Encoding Strategy</h4>
+                            <p>Splat conversion governed by visual hierarchy — focal density, motion readability,
+                                narrative priority over raw fidelity.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== STACK ========== -->
+    <section class="body-section" id="stack">
+        <div class="container">
+            <div class="section-eyebrow">Proprietary System</div>
+            <h2 class="section-title">The stack we own.</h2>
+            <p style="font-size: 18px; color: var(--ink-soft); max-width: 640px; line-height: 1.6;">Our intellectual
+                property is not the tools we use. It is the methodology, encoding system, and philosophy that connect
+                them — and the orchestration layer that holds the chain together at production scale.</p>
+
+            <div class="stack-grid reveal">
+                <div class="stack-item">
+                    <div class="stack-tm">Methodology</div>
+                    <h3>Authored Reality Pipeline™</h3>
+                    <p>The closed-loop production methodology. Author → Capture → Encode → Activate. Replaces linear
+                        asset workflows with reconstructable world systems.</p>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-tm">Orchestration</div>
+                    <h3>Worldwright™</h3>
+                    <p>The proprietary system that automates project structure, asset versioning, stage handoffs, and
+                        pipeline state across every world we produce.</p>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-tm">Encoding</div>
+                    <h3>SceneDNA™</h3>
+                    <p>A structured metadata schema describing world identity, anomaly registry, performance layers,
+                        splat parameters, and deployment configuration.</p>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-tm">Signature</div>
+                    <h3>Authored Anomalies™</h3>
+                    <p>The studio's design framework for narrative irregularity. Worlds that feel intentional, strange,
+                        and human-authored. Recognizable as ours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== WHITE PAPERS ========== -->
+    <section class="body-section papers" id="papers">
+        <div class="container">
+            <div class="paper-header">
+                <div>
+                    <div class="section-eyebrow">White Papers</div>
+                    <h2 class="section-title" style="margin-bottom: 0;">Read the work.</h2>
+                </div>
+                <div class="paper-toggle" role="tablist">
+                    <button class="active" data-paper="paper-1" role="tab">I · The Studio</button>
+                    <button data-paper="paper-2" role="tab">II · The Software Stack</button>
+                </div>
+            </div>
+
+            <article class="paper active" id="paper-1">
+                <div class="paper-meta">
+                    <span>White Paper I</span>
+                    <span>Studio Launch</span>
+                    <span>April 2026</span>
+                </div>
+                <h1>Anomaly X Productions launches <em>Worldwright™</em></h1>
+                <p>A new kind of production studio for the age of real-time, AI-assisted, world-based storytelling.</p>
+
+                <p>Anomaly X Productions, a Los Angeles–based virtual production studio founded by creative technologist
+                    Joseph Micallef, today announced the launch of <strong>Worldwright™</strong>, its proprietary
+                    orchestration system for authored virtual production. Worldwright™ powers the studio's flagship
+                    methodology, the <strong>Authored Reality Pipeline™ (ARP)</strong> — a system that transforms
+                    procedurally generated environments and live-action footage into reconstructable, real-time virtual
+                    worlds.</p>
+
+                <p>The studio is built around a single conviction: in a landscape flooded with prompt-driven content,
+                    the future belongs to creators who can author worlds with intent, structure, and perceptual
+                    fidelity. Anomaly X Productions exists to build those worlds — and the systems that make them
+                    repeatable.</p>
+
+                <blockquote>"Most AI studios generate content. Anomaly X builds worlds — designed, captured, and
+                    re-experienced. Our pipeline doesn't just make assets. It makes systems that can be revisited,
+                    re-lit, and re-performed." — Joseph Micallef, Founder</blockquote>
+
+                <h2>About Anomaly X Productions</h2>
+                <p>Anomaly X Productions is a creative technology studio working at the intersection of virtual
+                    production, real-time engines, AI compositing, and Gaussian splat reconstruction. The studio designs
+                    and deploys hybrid pipelines that bridge cinematic storytelling, immersive installation, and
+                    simulation-based world modeling.</p>
+                <p>The "X" in the name is intentional. It marks the studio's signature methodology: <strong>Authored
+                        Anomalies™</strong> — the deliberate, narrative-driven irregularities embedded into every world.
+                    Where most AI pipelines aim for generic photorealism, Anomaly X treats the anomaly as the signal.
+                    The break in logic, the impossible shadow, the scale distortion — these are not glitches. They are
+                    the fingerprints of authorship.</p>
+
+                <h3>Studio Capabilities</h3>
+                <ul>
+                    <li>Virtual production and LED stage workflows</li>
+                    <li>Real-time cinematic environments</li>
+                    <li>Gaussian splat scene reconstruction and deployment</li>
+                    <li>AI-assisted live-action compositing</li>
+                    <li>Interactive installations and projection systems</li>
+                    <li>Simulation environments for AI training and research</li>
+                    <li>Creative-technical pipeline consulting</li>
+                </ul>
+
+                <h2>The Problem with Current Pipelines</h2>
+                <p>Traditional virtual production and AI content pipelines suffer from the same fundamental constraint:
+                    they are linear, asset-based, and built around a one-way flow of creation to render. Asset-heavy
+                    workflows require expensive modeling for every scene variation. AI content pipelines generate output
+                    but produce nothing reusable — every prompt is a dead end. Compositing workflows layer footage on
+                    top of environments, never inside them. And real-time engines are treated as the place where worlds
+                    are <em>built</em>, not where they are <em>activated</em>. The result: fragile, one-off productions
+                    with no spatial memory and no system-level reusability. Anomaly X Productions was founded to address
+                    this directly.</p>
+
+                <h2>The Authored Reality Pipeline™</h2>
+                <p>The Authored Reality Pipeline™ is the studio's core production methodology. It replaces the
+                    traditional linear chain — <em>model → texture → light → render</em> — with a closed-loop system:
+                    <strong>Author → Capture → Encode → Activate</strong>. Worlds are designed procedurally, intersected
+                    with live-action performance, encoded as perceptual data via Gaussian splats, and deployed in
+                    real-time engines as reconstructable environments.
+                </p>
+
+                <h3>The Five Stages</h3>
+                <p><strong>01 — Sketch · Luma's Innovative Dreams.</strong> Hybrid concepting and previs. Dream Machine
+                    and Ray3 ideate the world's tone, motion language, and visual references before structure is
+                    committed.</p>
+                <p><strong>02 — Generate · Marble World Builder.</strong> Environments generated through rule-based
+                    systems, not handcrafted geometry. Spatial logic, scale relationships, and narrative intent embedded
+                    at the foundation. Every world receives at least one Authored Anomaly™ — a designed irregularity
+                    that gives the environment its identity.</p>
+                <p><strong>03 — Composite · Beeble.</strong> Live-action footage processed through Beeble's AI-driven
+                    keying and relighting. Performers are not composited <em>onto</em> environments — they are
+                    integrated <em>into</em> them, with lighting and color matched to the procedural world's logic.</p>
+                <p><strong>04 — Convert · Postshot.</strong> Unified scenes converted into Gaussian splat
+                    representations. This stage is governed by the studio's proprietary <strong>Perceptual Encoding
+                        Strategy (PES)</strong>, which prioritizes visual hierarchy, focal density, and motion
+                    readability over raw geometric fidelity.</p>
+                <p><strong>05 — Activate · Unreal Engine.</strong> Encoded environments deployed into Unreal for
+                    cinematic output, interactive experience, XR delivery, or installation. Critically, Unreal is not
+                    where worlds are <em>built</em> — it is where authored worlds are <em>played back</em>.</p>
+
+                <h2>Worldwright™ — The Orchestration System</h2>
+                <p>Worldwright™ is the proprietary orchestration system that automates and unifies the Authored Reality
+                    Pipeline™. It is the connective tissue between every tool in the chain — and the system of record
+                    for every world the studio produces.</p>
+                <p>It standardizes project structure across every stage, tracks assets, versions, and transformations
+                    through the entire pipeline, automates handoffs between procedural generation, compositing, splat
+                    conversion, and real-time deployment, encodes scenes as structured data, and maintains world memory
+                    — every environment becomes a reusable, reconstructable system.</p>
+                <p>At its foundation is <strong>SceneDNA™</strong>, the studio's proprietary metadata and scripting
+                    schema for describing world behavior. SceneDNA encodes environment logic (gravity, scale,
+                    architectural rules), spatial and narrative relationships, performance layers, splat prioritization
+                    and density mapping, real-time deployment configuration, and the Authored Anomalies registry.</p>
+                <blockquote>"SceneDNA™ allows worlds to be described not just visually, but structurally — bridging
+                    creative intent with computational systems."</blockquote>
+
+                <h2>Why Anomaly X Is Different</h2>
+                <p><strong>Artist-Engineered Worldbuilding.</strong> Most AI studios are run by either artists who
+                    outsource the engineering or engineers who outsource the art. Anomaly X is built by a creative
+                    technologist who codes the pipeline, authors the visual world, and has run a production studio.</p>
+                <p><strong>Worlds as Systems, Not Assets.</strong> Where competitors deliver scenes, Anomaly X delivers
+                    reconstructable environments. A world produced by the studio can be re-lit, re-performed,
+                    re-explored, and re-deployed across film, XR, installation, or simulation.</p>
+                <p><strong>Authored Anomalies as Brand Signature.</strong> The studio's commitment to designed
+                    irregularity means its work is recognizable. In a market saturated with generic AI photorealism,
+                    Anomaly X productions feel intentional, strange, and human-authored.</p>
+                <p><strong>Production-Aware AI Infrastructure.</strong> The pipeline is not a demo. It is built to
+                    support deadlines, review cycles, metadata, versioning, camera workflows, and client communication.
+                </p>
+                <p><strong>World Model Alignment.</strong> By encoding environments as structured perceptual data, the
+                    studio's outputs are natively compatible with emerging AI world model paradigms — opening pathways
+                    into simulation, training, and research markets that pure VFX studios cannot reach.</p>
+
+                <h2>About the Founder</h2>
+                <p><strong>Joseph Micallef</strong> is a Los Angeles–based creative technologist, educator, and former
+                    Director of Multimedia and Innovation Studio at Motorcar Parts of America. His work spans animation,
+                    web development, virtual production, 3D and VFX (Houdini, Blender, Unreal), AI workflow design, and
+                    emerging research in world model–based pipelines. Anomaly X Productions is the consolidation of that
+                    practice into a studio.</p>
+            </article>
+
+            <article class="paper" id="paper-2">
+                <div class="paper-meta">
+                    <span>White Paper II</span>
+                    <span>Software Stack</span>
+                    <span>April 2026</span>
+                </div>
+                <h1>The Authored Reality Pipeline — <em>tool by tool.</em></h1>
+                <p>How Marble, Beeble, Postshot, and Unreal Engine combine — under Worldwright orchestration — to
+                    produce reconstructable virtual worlds.</p>
+
+                <h2>Why This Stack</h2>
+                <p>The Authored Reality Pipeline™ is a deliberate composition. Each of its primary tools represents the
+                    current state of the art in its category, and each was selected for what it produces <em>for the
+                        next stage</em>, not for its standalone capability. The pipeline is designed around handoffs.
+                </p>
+                <p>Two principles guided tool selection. First, each tool must output a format that the next tool
+                    consumes natively — no glue scripts, no manual conversion bottlenecks. Second, each tool must
+                    support local or controlled execution. For client confidentiality, IP protection, and production
+                    reliability, the studio prioritizes tools that can be operated on-premises or with full data
+                    control.</p>
+
+                <h2>Stage 02 — Marble World Builder</h2>
+                <p><strong>Vendor:</strong> World Labs (founded by Fei-Fei Li). <strong>Role:</strong> Procedural
+                    environment generation. <strong>Output:</strong> Gaussian splats, triangle meshes, or video.</p>
+                <p>Marble is a generative multimodal world model. From a text prompt, image, video clip, panorama, or
+                    coarse 3D layout, Marble produces a persistent, navigable 3D environment that can be explored
+                    without the morphing or temporal inconsistency that affects frame-by-frame generative systems.
+                    Marble 1.1 (the current release) prioritizes lighting fidelity and reduced artifacts.</p>
+                <h3>Capabilities the studio uses</h3>
+                <ul>
+                    <li><strong>Multimodal input:</strong> Text, image, multi-image (up to 8), video, panoramas, or
+                        coarse 3D layouts via the Chisel tool, which separates structure from style.</li>
+                    <li><strong>Persistent geometry:</strong> Worlds are stable assets, not real-time hallucinations.
+                        They can be revisited and integrated downstream without drift.</li>
+                    <li><strong>Editing operations:</strong> Local edits, large-scale structural changes, and the Expand
+                        and Compose features for stitching multiple worlds into larger continuous environments.</li>
+                    <li><strong>Export formats:</strong> Gaussian splat, triangle mesh (low-poly for physics, high-poly
+                        for visuals), and rendered video.</li>
+                </ul>
+                <p>The Chisel layout tool enables a critical workflow for Anomaly X: defining structural rules before
+                    generation. This is where <strong>Authored Anomalies™</strong> are introduced. Rather than accepting
+                    whatever the model produces, the artist constrains the world's geometry first, then introduces a
+                    deliberate irregularity into the structural prompt. The anomaly survives generation because it was
+                    authored before it.</p>
+
+                <h2>Stage 03 — Beeble (SwitchLight 3.0)</h2>
+                <p><strong>Vendor:</strong> Beeble. <strong>Role:</strong> AI-driven keying, PBR extraction, and
+                    relighting. <strong>Output:</strong> Multi-channel 16-bit EXR with normals, base color, roughness,
+                    metallic, specular, alpha, and depth.</p>
+                <p>Beeble's SwitchLight is a video-to-PBR neural model. SwitchLight 3.0 processes multiple frames
+                    simultaneously for temporal stability, replacing the per-frame plus deflicker approach of version
+                    2.0. The model is trained on roughly ten times the data of its predecessor and produces fewer
+                    artifacts on fine detail like hair, skin, and fabric.</p>
+                <p>The studio runs <strong>Beeble Studio</strong>, the desktop version, which executes locally on GPU
+                    hardware. This is non-negotiable for client work involving talent likeness, NDA-bound projects, or
+                    any footage that cannot be cloud-uploaded.</p>
+                <h3>Capabilities the studio uses</h3>
+                <ul>
+                    <li><strong>Full-scene PBR generation</strong> — passes for actors, props, vehicles, architecture,
+                        environments. Used for shots that include practical set pieces alongside performers.</li>
+                    <li><strong>4K, unlimited duration</strong> — up to one hour at full precision, locally on GPU.</li>
+                    <li><strong>16-bit EXR output</strong> — multi-channel files containing all AOV passes in a single
+                        deliverable.</li>
+                    <li><strong>Beeble Editor</strong> — 3D editing environment for previewing relighting in real time,
+                        with HDRI lighting and direct import of GLTF, splats, HDRIs, and background plates.</li>
+                    <li><strong>Render queue + native plugins</strong> for Blender, Unreal Engine, and Nuke.</li>
+                </ul>
+                <p>The technical key here is that SwitchLight produces PBR passes, not just a keyed alpha. A performer
+                    captured in standard studio lighting can be re-lit in post to match the warm sunset of a Marble
+                    cathedral, the cold blue of an underwater scene, or the harsh top-down light of an authored anomaly
+                    that violates real-world physics. The anomaly's lighting is in the world; Beeble brings the
+                    performer into it.</p>
+
+                <h2>Stage 04 — Postshot</h2>
+                <p><strong>Vendor:</strong> Jawset. <strong>Role:</strong> Gaussian splat reconstruction and scene
+                    encoding. <strong>Output:</strong> PLY (Gaussian splat radiance field) and Postshot's native .psht.
+                </p>
+                <p>Postshot is a desktop application for Gaussian splat reconstruction — now considered the leading
+                    desktop platform in its category. It accepts photographs, image sequences, or video, performs camera
+                    tracking and alignment, and trains splat representations of the captured scene.</p>
+                <h3>Capabilities the studio uses</h3>
+                <ul>
+                    <li><strong>Multiple training profiles</strong> — Splat3 (default, fine-detail focus), Splat MCMC
+                        (more forgiving on imperfect captures), and Splat ADC (legacy growth-rate-controlled).</li>
+                    <li><strong>Splat count control</strong> — hard limits on Gaussian primitives, allowing the studio
+                        to tune for memory, render performance, and detail level. Essential for Unreal deployment.</li>
+                    <li><strong>Live training preview</strong> — quality monitored in real time, parameters adjustable
+                        mid-run.</li>
+                    <li><strong>RealityCapture import</strong> — alignment data from RealityCapture produces faster and
+                        more reliable poses than Postshot's built-in tracking. Studio standard for capture-heavy shots.
+                    </li>
+                    <li><strong>Sky model</strong> — projects environment data onto a sphere, reducing the
+                        floating-cloud artifacts that plague outdoor splat reconstructions.</li>
+                    <li><strong>Region-of-interest learning, masking, editing</strong> — cleanup tools for artifact
+                        removal and focal prioritization.</li>
+                </ul>
+                <p>Postshot is where the pipeline performs its <strong>Perceptual Translation</strong>. The studio's
+                    <strong>Perceptual Encoding Strategy (PES)</strong> governs this stage — specifying density priority
+                    for narrative focal zones (faces, anomalies, hero objects), splat count budgets matched to the
+                    target Unreal deployment, profile selection based on capture quality, sky model usage, and region
+                    masking. PES is the difference between running a tool and operating it with intent.
+                </p>
+
+                <h2>Stage 05 — Unreal Engine</h2>
+                <p><strong>Vendor:</strong> Epic Games. <strong>Role:</strong> Real-time activation, camera control,
+                    interaction, and final output.</p>
+                <p>Unreal Engine is the de facto standard for virtual production. The studio uses Unreal for Gaussian
+                    splat rendering (via XVERSE 3D-GS, Postshot's plugin, and evolving native support), real-time camera
+                    systems for previs and final-pixel work, Sequencer and Movie Render Queue for cinematic output,
+                    Niagara for VFX integration with imported splat scenes, Lumen and Nanite for conventional CG
+                    supplements, and multi-platform deployment to cinematic, interactive, XR, and installation targets.
+                </p>
+                <h3>Why it's stage five — and not stage one</h3>
+                <p>This is the philosophical inversion at the heart of the Authored Reality Pipeline. In conventional
+                    virtual production, Unreal <em>is</em> the studio. Worlds are built in Unreal. Lighting is set in
+                    Unreal. Cameras are blocked in Unreal.</p>
+                <p>In our pipeline, Unreal is the <strong>Activation Layer</strong>. The world has already been authored
+                    (Marble), the performance has already been integrated (Beeble), and the scene has already been
+                    encoded (Postshot). What enters Unreal is a finished perceptual artifact that the engine plays back
+                    and makes interactive. Iteration on environment design happens in Marble, lighting iteration happens
+                    in Beeble, splat budget iteration happens in Postshot. Unreal becomes a deployment and interaction
+                    layer — fast, focused, and free to handle the things real-time engines do best.</p>
+
+                <h2>Worldwright — The Orchestration Layer</h2>
+                <p>Each tool above produces an artifact. Each must be tracked, named, versioned, and routed to the next
+                    stage. Doing this manually across a real production schedule — multiple shots, revision rounds,
+                    client review, parallel teams — is where most ambitious virtual production pipelines collapse.</p>
+                <p>Worldwright manages project structure, asset versioning, stage state (<code>READY_FOR_BEEBLE</code>,
+                    <code>READY_FOR_POSTSHOT</code>, <code>READY_FOR_UNREAL</code>), SceneDNA records, and re-entry
+                    support. Because every artifact is preserved with its parameters, any shot can be returned to any
+                    stage — re-train the splat with a higher budget, re-light the performer for a new edit, regenerate
+                    the world with a tweaked anomaly — without rebuilding the project. This is what makes Anomaly X a
+                    studio rather than a portfolio.
+                </p>
+
+                <h2>Stack Summary</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stage</th>
+                            <th>Tool</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01 Sketch</td>
+                            <td>Unpromptable</td>
+                            <td>Concepting and previs</td>
+                        </tr>
+                        <tr>
+                            <td>02 Generate</td>
+                            <td>Marble · World Labs</td>
+                            <td>Procedural environments</td>
+                        </tr>
+                        <tr>
+                            <td>03 Composite</td>
+                            <td>Beeble · SwitchLight 3.0</td>
+                            <td>AI relighting and PBR</td>
+                        </tr>
+                        <tr>
+                            <td>04 Convert</td>
+                            <td>Postshot · Jawset</td>
+                            <td>Gaussian splat reconstruction</td>
+                        </tr>
+                        <tr>
+                            <td>05 Activate</td>
+                            <td>Unreal Engine</td>
+                            <td>Real-time deployment</td>
+                        </tr>
+                        <tr>
+                            <td>Orchestration</td>
+                            <td>Worldwright™</td>
+                            <td>State, versioning, handoffs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+        </div>
+    </section>
+
+    <!-- ========== HANDOFF TO RESEARCH ========== -->
+    <section class="handoff" id="handoff">
+        <svg class="handoff-x" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+            <line x1="8" y1="12" x2="92" y2="88" />
+            <line x1="92" y1="12" x2="8" y2="88" />
+        </svg>
+        <div class="handoff-content reveal">
+            <div class="section-eyebrow">Continued at</div>
+            <h2>The studio is one half. The <strong>research</strong> is the other.</h2>
+            <p>Anomaly X Productions is the working studio. World Model Research is its research counterpart — exploring
+                how authored environments, splat reconstruction, and emerging world models converge into a new paradigm
+                for synthetic experience.</p>
+            <a class="research-cta" href="https://worldmodelresearch.com/" target="_blank" rel="noopener">Visit World
+                Model Research →</a>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <div class="footer-grid">
+            <div class="brand">
+                <h3>Anomaly&nbsp;X</h3>
+                <p>A Los Angeles virtual production studio. Authored worlds, captured performance, encoded perception,
+                    real-time activation.</p>
+            </div>
+            <div>
+                <h4>Studio</h4>
+                <a href="#manifesto">Manifesto</a>
+                <a href="#pipeline">Pipeline</a>
+                <a href="#stack">Stack</a>
+            </div>
+            <div>
+                <h4>Papers</h4>
+                <a href="#papers">I — Studio Launch</a>
+                <a href="#papers">II — Software Stack</a>
+            </div>
+            <div>
+                <h4>Connected</h4>
+                <a href="https://worldmodelresearch.com/" target="_blank" rel="noopener">World Model Research</a>
+                <a href="https://marble.worldlabs.ai/" target="_blank" rel="noopener">Marble</a>
+                <a href="https://beeble.ai/" target="_blank" rel="noopener">Beeble</a>
+                <a href="https://www.jawset.com/" target="_blank" rel="noopener">Postshot</a>
+                <a href="https://www.unrealengine.com/" target="_blank" rel="noopener">Unreal Engine</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Anomaly X Productions · Los Angeles</span>
+            <span>Worldwright™ · SceneDNA™ · Authored Anomalies™</span>
+        </div>
+    </footer>
+
+    <script>
+        // Parallax — subtle drift on the X marks
+        const heroX = document.querySelector('.hero-x');
+        const handoffX = document.querySelector('.handoff-x');
+        const handoff = document.querySelector('.handoff');
+
+        let ticking = false;
+        function updateParallax() {
+            const sy = window.scrollY;
+            if (heroX) {
+                const rotate = sy * 0.02;
+                const drift = sy * 0.15;
+                heroX.style.transform = `translate(calc(-50% + 0px), calc(-50% + ${drift}px)) rotate(${rotate}deg)`;
+            }
+            if (handoffX && handoff) {
+                const rect = handoff.getBoundingClientRect();
+                const center = rect.top + rect.height / 2;
+                const fromCenter = (window.innerHeight / 2) - center;
+                const rotate = fromCenter * 0.04;
+                handoffX.style.transform = `translate(-50%, calc(-50% + ${fromCenter * 0.1}px)) rotate(${rotate}deg)`;
+            }
+            ticking = false;
+        }
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }, { passive: true });
+        updateParallax();
+
+        // Reveal-on-scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
+        reveals.forEach(el => io.observe(el));
+
+        // Paper toggle
+        const toggleButtons = document.querySelectorAll('.paper-toggle button');
+        const papers = document.querySelectorAll('article.paper');
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.dataset.paper;
+                toggleButtons.forEach(b => b.classList.toggle('active', b === btn));
+                papers.forEach(p => p.classList.toggle('active', p.id === target));
+                // Scroll the paper section into a comfortable position
+                document.getElementById('papers').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
