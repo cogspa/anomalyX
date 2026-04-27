@@ -736,6 +736,93 @@
             color: var(--ink);
         }
 
+        /* ========== PDF DOWNLOADS ========== */
+        .paper-downloads {
+            max-width: 1080px;
+            margin: 0 auto 56px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .download-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--ink);
+        }
+
+        .download-card img {
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--rule);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .download-card:hover img {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-caption {
+            margin-top: 16px;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        /* Tooltip */
+        .download-tooltip {
+            position: absolute;
+            bottom: calc(100% + 16px);
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--void);
+            color: var(--paper-soft);
+            padding: 12px 16px;
+            font-size: 13px;
+            line-height: 1.4;
+            width: max-content;
+            max-width: 280px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            pointer-events: none;
+            z-index: 10;
+            border-radius: 4px;
+        }
+
+        .download-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--void) transparent transparent transparent;
+        }
+
+        .download-card:hover .download-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 720px) {
+            .paper-downloads {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
         /* ========== DARK HANDOFF ========== */
         .handoff {
             background: var(--void);
@@ -1132,6 +1219,24 @@
                     <button class="active" data-paper="paper-1" role="tab">I · The Studio</button>
                     <button data-paper="paper-2" role="tab">II · The Software Stack</button>
                 </div>
+            </div>
+
+            <div class="paper-downloads">
+                <a href="assets/AnomalyX_WhitePaper_I_Studio.pdf" target="_blank" rel="noopener" class="download-card">
+                    <div class="download-tooltip">Detailed overview of Anomaly X Productions, our philosophy, and capabilities.</div>
+                    <img src="assets/AnomalyX_tmb.png" alt="White Paper I Thumbnail">
+                    <div class="download-caption">Paper I: The Studio</div>
+                </a>
+                <a href="assets/AnomalyX_WhitePaper_II_Worldwright.pdf" target="_blank" rel="noopener" class="download-card">
+                    <div class="download-tooltip">An in-depth look at Worldwright, the orchestration system powering the studio.</div>
+                    <img src="assets/WorldWright_tmb.png" alt="White Paper II Thumbnail">
+                    <div class="download-caption">Paper II: Worldwright</div>
+                </a>
+                <a href="assets/AnomalyX_WhitePaper_III_AuthoredRealityPipeline.pdf" target="_blank" rel="noopener" class="download-card">
+                    <div class="download-tooltip">A comprehensive guide to the five stages of the Authored Reality Pipeline.</div>
+                    <img src="assets/AuthoredReality_tmb.png" alt="White Paper III Thumbnail">
+                    <div class="download-caption">Paper III: Pipeline</div>
+                </a>
             </div>
 
             <article class="paper active" id="paper-1">
